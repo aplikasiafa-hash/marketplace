@@ -34,12 +34,19 @@
     return e;
   };
 
+  /* ── Lapisan ──────────────────────────────────────────────────────── */
+  // Semua tabir, lembar, dan toast dimasukkan ke dalam #akar, bukan ke body,
+  // supaya tetap berada di dalam bingkai ponsel saat dibuka di desktop.
+  window.lapisan = function () {
+    return document.getElementById("akar") || document.body;
+  };
+
   /* ── Pesan singkat ────────────────────────────────────────────────── */
   let wadahToast;
   window.toast = function (pesan, jenis) {
-    if (!wadahToast) {
+    if (!wadahToast || !wadahToast.isConnected) {
       wadahToast = el("div", "toast-wadah");
-      document.body.appendChild(wadahToast);
+      lapisan().appendChild(wadahToast);
     }
     const t = el("div", "toast " + (jenis || "info"), esc(pesan));
     wadahToast.appendChild(t);
@@ -53,7 +60,7 @@
       if (!o) {
         o = el("div", "tabir", '<div class="putar"></div><p id="teks-muat"></p>');
         o.id = "tabir-muat";
-        document.body.appendChild(o);
+        lapisan().appendChild(o);
       }
       $("#teks-muat").textContent = teks || "Memuat…";
       o.style.display = "flex";
@@ -77,7 +84,7 @@
         bg.remove();
         selesai(b.dataset.x === "1");
       });
-      document.body.appendChild(bg);
+      lapisan().appendChild(bg);
     });
   };
 

@@ -17,12 +17,19 @@
     return s;
   }
 
+  function temaGelap() {
+    const atur = document.documentElement.dataset.tema;
+    if (atur === "gelap") return true;
+    if (atur === "terang") return false;
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  }
+
   function gambar(kanvas, kode) {
     const w = kanvas.width = 260, h = kanvas.height = 90;
     const g = kanvas.getContext("2d");
-    const gelap = document.documentElement.dataset.tema === "gelap";
+    const gelap = temaGelap();
 
-    g.fillStyle = gelap ? "#15232b" : "#eef4f6";
+    g.fillStyle = gelap ? "#1E222B" : "#F7F8FA";
     g.fillRect(0, 0, w, h);
 
     // bintik derau
@@ -33,7 +40,7 @@
 
     // garis pengganggu
     for (let i = 0; i < 5; i++) {
-      g.strokeStyle = "hsla(" + acak(140, 210) + ",60%," + (gelap ? "70%" : "40%") + ",0.45)";
+      g.strokeStyle = "hsla(" + acak(16, 34) + ",72%," + (gelap ? "66%" : "52%") + ",0.42)";
       g.lineWidth = acak(1, 2.2);
       g.beginPath();
       g.moveTo(0, acak(0, h));
@@ -50,7 +57,10 @@
       g.font = "bold " + Math.round(acak(36, 46)) + "px Georgia, serif";
       g.textAlign = "center";
       g.textBaseline = "middle";
-      g.fillStyle = "hsl(" + acak(150, 205) + ",65%," + (gelap ? "78%" : "26%") + ")";
+      // sebagian huruf gelap pekat, sebagian oranye — tetap kontras di dua tema
+      g.fillStyle = Math.random() < 0.62
+        ? (gelap ? "#ECEFF4" : "#121420")
+        : "hsl(" + acak(18, 32) + ",88%," + (gelap ? "64%" : "44%") + ")";
       g.fillText(kode[i], 0, 0);
       g.restore();
     }

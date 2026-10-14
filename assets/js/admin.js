@@ -312,7 +312,7 @@
         const hasil = await panggilApi("publish");
         muat(false);
         $("#hasil-terbit").innerHTML =
-          '<div class="kartu" style="background:var(--hijau-muda)">✅ Berhasil diterbitkan.<br>' +
+          '<div class="kartu sorot">✅ Berhasil diterbitkan.<br>' +
           '<span class="mini">Versi baru: ' + esc(hasil.versi) + '</span></div>';
         toast("Katalog terbit: " + hasil.versi, "sukses");
         await Katalog.muat(true);

@@ -101,7 +101,7 @@
     const terbaru  = Katalog.produk({}).slice(-10).reverse();
 
     wadah.innerHTML =
-      (pengumuman ? '<div class="kartu" style="background:var(--hijau-muda)">📢 ' + esc(pengumuman) + '</div>' : "") +
+      (pengumuman ? '<div class="kartu sorot">📢 ' + esc(pengumuman) + '</div>' : "") +
       '<div class="cari"><input id="cari-cepat" placeholder="Cari beras, ikan, sayur…" readonly></div>' +
       '<div class="judul-bagian">Kategori</div>' +
       '<div class="kisi-kategori">' +
@@ -128,14 +128,22 @@
 
   function kartuProduk(p) {
     const diskon = p.harga_coret && p.harga_coret > p.harga;
+    const persen = diskon ? Math.round((1 - p.harga / p.harga_coret) * 100) : 0;
+
     return '<div class="kartu-produk" data-produk="' + esc(p.id) + '">' +
-      '<img loading="lazy" src="' + esc(Katalog.gambar(p)) + '" alt="' + esc(p.nama) + '">' +
+      '<div class="bingkai-foto">' +
+        (persen ? '<span class="badge-diskon">-' + persen + '%</span>' : "") +
+        '<img loading="lazy" src="' + esc(Katalog.gambar(p)) + '" alt="' + esc(p.nama) + '">' +
+      '</div>' +
       '<div class="isi-kartu">' +
         '<p class="nama">' + esc(p.nama) + '</p>' +
         '<div class="harga">' + rupiah(p.harga) +
           (diskon ? '<span class="harga-coret">' + rupiah(p.harga_coret) + '</span>' : "") + '</div>' +
-        '<div class="meta">' + esc(String(p.stok || 0)) + ' ' + esc(p.satuan || "pcs") +
-          (p.terjual ? ' · terjual ' + esc(String(p.terjual)) : "") + '</div>' +
+        '<div class="meta">' +
+          (p.rating ? '<span class="bintang">★ ' + esc(String(p.rating)) + '</span> · ' : "") +
+          esc(String(p.stok || 0)) + ' ' + esc(p.satuan || "pcs") +
+          (p.terjual ? ' · ' + esc(String(p.terjual)) + ' terjual' : "") +
+        '</div>' +
       '</div></div>';
   }
 
@@ -361,7 +369,7 @@
 
   /* ── Pesanan ──────────────────────────────────────────────────────── */
   async function vPesanan(wadah) {
-    wadah.innerHTML = '<div class="kosong"><div class="putar" style="border-color:var(--garis);border-top-color:var(--hijau);margin:0 auto"></div></div>';
+    wadah.innerHTML = '<div class="kosong"><div class="putar gelap" style="margin:0 auto"></div></div>';
     try {
       const cuplik = await fb.db.collection("pesanan")
         .where("uid", "==", Auth.profil.uid)
@@ -497,8 +505,8 @@
       '<div class="pegangan"></div>' +
       '<div class="lembar-kepala"><h3>' + esc(judul) + '</h3><button class="btn abu kecil" data-tutup>✕</button></div>' +
       '<div class="lembar-isi">' + isiHtml + '</div>');
-    document.body.appendChild(bg);
-    document.body.appendChild(lembar);
+    lapisan().appendChild(bg);
+    lapisan().appendChild(lembar);
     requestAnimationFrame(function () { lembar.classList.add("buka"); });
     bg.addEventListener("click", function () { tutupLembar(lembar); });
     lembar.addEventListener("click", function (e) {

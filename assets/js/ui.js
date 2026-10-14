@@ -12,8 +12,8 @@
       '<div class="lembar-kepala"><h3>' + esc(judul) + '</h3>' +
       '<button class="btn abu kecil" data-tutup>✕</button></div>' +
       '<div class="lembar-isi">' + isiHtml + '</div>');
-    document.body.appendChild(bg);
-    document.body.appendChild(lembar);
+    lapisan().appendChild(bg);
+    lapisan().appendChild(lembar);
     requestAnimationFrame(function () { lembar.classList.add("buka"); });
     bg.addEventListener("click", function () { tutupLembar(lembar); });
     lembar.addEventListener("click", function (e) {
@@ -76,7 +76,7 @@
 
   window.memuat = function (wadah) {
     wadah.innerHTML = '<div class="kosong">' +
-      '<div class="putar" style="border-color:var(--garis);border-top-color:var(--hijau);margin:0 auto"></div></div>';
+      '<div class="putar gelap" style="margin:0 auto"></div></div>';
   };
 
   window.kosong = function (wadah, ikon, teks) {

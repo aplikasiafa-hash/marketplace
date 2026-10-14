@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="id" data-tema="">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f7a5a">
+<title>Pasar Online Pinrang</title>
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="assets/css/app.css">
+<style>
+  .pilih{padding:30px 22px;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+  .pintu{display:flex;gap:14px;align-items:center;background:var(--kartu);border-radius:var(--radius);
+         padding:16px;box-shadow:var(--bayang);margin-bottom:12px;cursor:pointer}
+  .pintu .lingkar{width:46px;height:46px;border-radius:14px;background:var(--hijau-muda);
+         display:flex;align-items:center;justify-content:center;font-size:22px;flex:none}
+  .pintu h3{margin:0 0 2px;font-size:15px}
+  .pintu p{margin:0;font-size:12px;color:var(--teks2)}
+</style>
+</head>
+<body>
+<div id="akar">
+  <div class="pilih">
+    <div class="merek">
+      <div class="merek-ikon">🛒</div>
+      <h1>Pasar Online Pinrang</h1>
+      <p class="peran-label">Pilih aplikasi</p>
+    </div>
+
+    <a class="pintu" href="user.html">
+      <div class="lingkar">🛍️</div>
+      <div><h3>Pembeli</h3><p>Belanja kebutuhan dari toko sekitar</p></div>
+    </a>
+    <a class="pintu" href="admin.html">
+      <div class="lingkar">⚙️</div>
+      <div><h3>Admin</h3><p>Kelola produk, foto, dan penerbitan katalog</p></div>
+    </a>
+    <a class="pintu" href="cs.html">
+      <div class="lingkar">🎧</div>
+      <div><h3>Customer Service</h3><p>Menyetujui pesanan dan permintaan pembeli</p></div>
+    </a>
+    <a class="pintu" href="kurir.html">
+      <div class="lingkar">🛵</div>
+      <div><h3>Kurir</h3><p>Ambil tugas dan antar pesanan</p></div>
+    </a>
+
+    <p class="versi" id="info-versi">Memuat…</p>
+  </div>
+</div>
+
+<script src="assets/js/config.js"></script>
+<script>
+  const tema = localStorage.getItem("pp_tema");
+  if (tema) document.documentElement.dataset.tema = tema;
+
+  // Arahkan langsung ke aplikasi yang terakhir dipakai, bila ada.
+  const terakhir = localStorage.getItem("pp_app_terakhir");
+  if (terakhir && location.search.indexOf("pilih") < 0) {
+    document.querySelectorAll(".pintu").forEach(function (a) {
+      if (a.getAttribute("href") === terakhir) a.style.outline = "2px solid var(--hijau)";
+    });
+  }
+  document.querySelectorAll(".pintu").forEach(function (a) {
+    a.addEventListener("click", function () {
+      localStorage.setItem("pp_app_terakhir", a.getAttribute("href"));
+    });
+  });
+
+  fetch(APP_CONFIG.urlVersi + "?t=" + Date.now(), { cache: "no-store" })
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      document.getElementById("info-versi").textContent =
+        "Katalog " + j.versi + " · diperbarui " + j.diperbarui;
+    })
+    .catch(function () {
+      document.getElementById("info-versi").textContent = "v" + APP_CONFIG.versiApp;
+    });
+
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function () {});
+</script>
+</body>
+</html>

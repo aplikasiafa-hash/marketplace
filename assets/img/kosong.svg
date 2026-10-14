@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <rect width="200" height="200" fill="#e8eef0"/>
+  <g fill="none" stroke="#b4c6cd" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="48" y="60" width="104" height="80" rx="8"/>
+    <path d="M48 118l26-24 20 18 22-26 36 32"/>
+  </g>
+  <circle cx="122" cy="84" r="9" fill="#b4c6cd"/>
+  <text x="100" y="170" font-family="Arial,sans-serif" font-size="14" fill="#9aafb7" text-anchor="middle">Tanpa foto</text>
+</svg>

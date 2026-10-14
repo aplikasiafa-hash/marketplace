@@ -3,9 +3,10 @@
  * Gambar & berkas aplikasi disimpan permanen di perangkat (cache-first),
  * jadi setiap foto produk hanya diunduh SATU KALI selamanya.
  * ===================================================================== */
-const VERSI_SHELL = "pp-shell-v1";
+const VERSI_SHELL = "pp-shell-v2";
 const CACHE_GAMBAR = "pp-gambar-v1";   // jangan dihapus saat perbarui versi
 const CACHE_DATA   = "pp-data-v1";
+const CACHE_FONT   = "pp-font-v1";
 
 const RANGKA = [
   "./",
@@ -90,10 +91,28 @@ self.addEventListener("fetch", (e) => {
     return;
   }
 
-  // 4. Firebase & Apps Script: selalu langsung ke jaringan.
+  // 4. Font Google: disimpan permanen, diunduh sekali saja.
+  if (/^fonts\.(googleapis|gstatic)\.com$/.test(url.host)) {
+    e.respondWith(
+      caches.open(CACHE_FONT).then(async (c) => {
+        const simpanan = await c.match(req);
+        if (simpanan) return simpanan;
+        try {
+          const res = await fetch(req);
+          if (res.ok || res.type === "opaque") c.put(req, res.clone());
+          return res;
+        } catch (err) {
+          return simpanan || Response.error();
+        }
+      })
+    );
+    return;
+  }
+
+  // 5. Firebase & Apps Script: selalu langsung ke jaringan.
   if (/gstatic\.com|googleapis\.com|script\.google\.com|firebaseio/.test(url.host)) return;
 
-  // 5. Rangka aplikasi: cache dulu, perbarui di latar belakang.
+  // 6. Rangka aplikasi: cache dulu, perbarui di latar belakang.
   e.respondWith(
     caches.match(req).then((simpanan) => {
       const jaringan = fetch(req).then((res) => {

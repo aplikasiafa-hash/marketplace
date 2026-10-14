@@ -3,18 +3,31 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0f7a5a">
+<meta name="theme-color" content="#F2F3F5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0C0E13" media="(prefers-color-scheme: dark)">
 <title>Pasar Online Pinrang</title>
 <link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
 <link rel="stylesheet" href="assets/css/app.css">
 <style>
-  .pilih{padding:30px 22px;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
-  .pintu{display:flex;gap:14px;align-items:center;background:var(--kartu);border-radius:var(--radius);
-         padding:16px;box-shadow:var(--bayang);margin-bottom:12px;cursor:pointer}
-  .pintu .lingkar{width:46px;height:46px;border-radius:14px;background:var(--hijau-muda);
-         display:flex;align-items:center;justify-content:center;font-size:22px;flex:none}
-  .pintu h3{margin:0 0 2px;font-size:15px}
-  .pintu p{margin:0;font-size:12px;color:var(--teks2)}
+  .pilih{flex:1;overflow-y:auto;padding:34px 22px;display:flex;flex-direction:column;justify-content:center}
+  .pintu{
+    display:flex;gap:14px;align-items:center;background:var(--kartu);
+    border-radius:var(--radius);padding:15px;box-shadow:var(--bayang);
+    margin-bottom:11px;cursor:pointer;transition:transform .12s;
+    color:var(--teks);font-weight:400;
+  }
+  .pintu:active{transform:scale(.985)}
+  .pintu.terakhir{box-shadow:var(--bayang),0 0 0 2px var(--teks)}
+  .pintu .lingkar{
+    width:46px;height:46px;border-radius:15px;background:var(--kartu-2);
+    display:flex;align-items:center;justify-content:center;font-size:21px;flex:none;
+  }
+  .pintu h3{margin:0 0 2px;font-size:14.5px;font-weight:700;letter-spacing:-.02em}
+  .pintu p{margin:0;font-size:12px;color:var(--teks2);font-weight:500}
+  .pintu .panah{margin-left:auto;color:var(--teks3);font-size:17px}
 </style>
 </head>
 <body>
@@ -29,18 +42,22 @@
     <a class="pintu" href="user.html">
       <div class="lingkar">🛍️</div>
       <div><h3>Pembeli</h3><p>Belanja kebutuhan dari toko sekitar</p></div>
+      <div class="panah">›</div>
     </a>
     <a class="pintu" href="admin.html">
       <div class="lingkar">⚙️</div>
       <div><h3>Admin</h3><p>Kelola produk, foto, dan penerbitan katalog</p></div>
+      <div class="panah">›</div>
     </a>
     <a class="pintu" href="cs.html">
       <div class="lingkar">🎧</div>
       <div><h3>Customer Service</h3><p>Menyetujui pesanan dan permintaan pembeli</p></div>
+      <div class="panah">›</div>
     </a>
     <a class="pintu" href="kurir.html">
       <div class="lingkar">🛵</div>
       <div><h3>Kurir</h3><p>Ambil tugas dan antar pesanan</p></div>
+      <div class="panah">›</div>
     </a>
 
     <p class="versi" id="info-versi">Memuat…</p>
@@ -54,9 +71,9 @@
 
   // Arahkan langsung ke aplikasi yang terakhir dipakai, bila ada.
   const terakhir = localStorage.getItem("pp_app_terakhir");
-  if (terakhir && location.search.indexOf("pilih") < 0) {
+  if (terakhir) {
     document.querySelectorAll(".pintu").forEach(function (a) {
-      if (a.getAttribute("href") === terakhir) a.style.outline = "2px solid var(--hijau)";
+      if (a.getAttribute("href") === terakhir) a.classList.add("terakhir");
     });
   }
   document.querySelectorAll(".pintu").forEach(function (a) {
